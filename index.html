@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<title>k8s</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster&effect=shadow-multiple">
+<style>
+
+.w3-sofia {
+        font-family: "Lobster", Sans-serif;
+}
+
+</style>
+
+<body onload="myFunction()" >
+
+<div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="mySidebar">
+  <button class="w3-bar-item w3-button w3-large"
+  onclick="w3_close()">Close &times;</button>
+  <a onclick="describe();" class="w3-bar-item w3-button">Describe Resource</a>
+  <a onclick= "viewpod();" class="w3-bar-item w3-button">View Pod</a>
+  <a onclick="launch();" class="w3-bar-item w3-button">Launch Pod</a>
+  <a onclick="deployment();" class="w3-bar-item w3-button">Create Deployment</a>
+  <a onclick="service();" class="w3-bar-item w3-button">Create Service</a>
+  <a onclick="scaling();" class="w3-bar-item w3-button">Replicas</a>
+  <a onclick="Reset();" class="w3-bar-item w3-button">Reset KubernetesGO</a>
+  <a onclick="DeleteRes();" class="w3-bar-item w3-button">Delete Resource</a>
+  <div style="padding: 10px;"></div>
+  <div id="o1" style="font-size: large;"><p class="w3-sofia">Enter your input...</p></div>
+  <input id="in1"><button id="bt1"  onclick= 'other();' >Click me</button></input><br/>
+
+</div>
+
+<div id="main">
+
+<div class="w3-teal">
+  <button id="openNav" class="w3-button w3-teal w3-xlarge" onclick="w3_open()">&#9776;</button>
+  <div class="w3-container">
+    <h1>KubernetesGO</h1>
+  </div>
+</div>
+
+<div class="w3-display-container">
+        <img src="https://images.unsplash.com/photo-1580089056071-11f31b94fefe?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c3RyZWV0JTIwYXJ0fGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80" style="width: 100%;">
+        <div id="p1" class="w3-padding w3-display-topleft">[user@localhost]  you will get your ouput here.....</div>
+</div>
+
+</div>
+</body>
+</html>
+
+<script>
+var k = " --kubeconfig admin.conf";
+function viewpod(){
+        var i = "kubectl get pods"+k;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","http://192.168.56.115/cgi-bin/dockerps.py?x="+i,true);
+        xhr.send();
+        xhr.onload = function( ){
+                var out = xhr.responseText;
+                document.getElementById('p1').innerHTML = out;
+        }
+        document.getElementById('o1').innerHTML = "Write your code here:";
+}
+
+function viewdeploy(){
+        var i = "kubectl get deployment"+k;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","http://192.168.56.115/cgi-bin/dockerps.py?x="+i,true);
+        xhr.send();
+        xhr.onload = function( ){
+                var out = xhr.responseText;
+                document.getElementById('p1').innerHTML = out;
+        }
+        document.getElementById('o1').innerHTML = "Write your code here:";
+}
+
+
+function describe(){
+        var res = prompt("Please Enter the Name of Resource", "Example: pod");
+        var pod = prompt("Please Enter the name of the Pod", "Example: mypod1");
+        var i = "kubectl describe "+res+" "+pod+k;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","http://192.168.56.115/cgi-bin/dockerps.py?x="+i,true);
+        xhr.send();
+        xhr.onload = function( ){
+                var out = xhr.responseText;
+                document.getElementById('p1').innerHTML = out;
+        }
+        document.getElementById('o1').innerHTML = "Write your code here:";
+}
+
+function launch(){
+        var name = prompt("Please Enter the Name of Pod", "Example: mypod1");
+        var images = prompt("Please Enter the name of the Image", "Example: httpd:latest ");
+        var i = "kubectl run "+name+" --image="+images+k;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","http://192.168.56.115/cgi-bin/dockerps.py?x="+i,true);
+        xhr.send();
+        xhr.onload = function( ){
+                var out = xhr.responseText;
+                document.getElementById('p1').innerHTML = out;
+        }
+        document.getElementById('o1').innerHTML = "Write your code here:";
+}
+function deployment(){
+        var name = prompt("Please Enter the Name of Pod", "Example: mypod1");
+        var images = prompt("Please Enter the Name of the Image", "Example: httpd:latest ");
+        var i = "kubectl create "+name+" --image="+images+k;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","http://192.168.56.115/cgi-bin/dockerps.py?x="+i,true);
+        xhr.send();
+        xhr.onload = function( ){
+                var out = xhr.responseText;
+                document.getElementById('p1').innerHTML = out;
+        }
+        document.getElementById('o1').innerHTML = "Write your code here:";
+}
+function service(){
+        var name = prompt("Please Enter the Name of Deployment to be Exposed", "Example: mypod1");
+        var port = prompt("Please Enter the port which is to be executed", "Example: 80");
+        var i = "kubectl expose deployment "+name+" --type= NodePort --port="+port+k;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","http://192.168.56.115/cgi-bin/dockerps.py?x="+i,true);
+        xhr.send();
+        xhr.onload = function( ){
+                var out = xhr.responseText;
+                document.getElementById('p1').innerHTML = out;
+        }
+        document.getElementById('o1').innerHTML = "Write your code here:";
+        }
+
+function scaling(){
+        var name = prompt("Please Enter the Name of the Deployment to be Scaled", "Example: mypod1");
+        var num = prompt("Please Enter the Number of Replicas", "Example: 3 ");
+        var i = "kubectl scale deployment "+name+" --replicas="+num+k;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","http://192.168.56.115/cgi-bin/dockerps.py?x="+i,true);
+        xhr.send();
+        xhr.onload = function( ){
+                var out = xhr.responseText;
+                document.getElementById('p1').innerHTML = out;
+        }
+        document.getElementById('o1').innerHTML = "Write your code here:";
+}
+function Reset(){
+        var i = "kubectl delete all --all"+k;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","http://192.168.56.115/cgi-bin/dockerps.py?x="+i,true);
+        xhr.send();
+        xhr.onload = function( ){
+                var out = xhr.responseText;
+                document.getElementById('p1').innerHTML = out;
+        }
+        document.getElementById('o1').innerHTML = "Write your code here:";
+        }
+function DeleteRes(){
+        var res = prompt("Please Enter the Name of Resource", "Example: pod");
+        var pod = prompt("Please Enter the Name of Pod", "Example: mypod1 ");
+        var i = "kubectl delete "+res+" "+prod+k;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","http://192.168.56.115/cgi-bin/dockerps.py?x="+i,true);
+        xhr.send();
+        xhr.onload = function( ){
+                var out = xhr.responseText;
+                document.getElementById('p1').innerHTML = out;
+        }
+        document.getElementById('o1').innerHTML = "Write your code here:";
+}
+function other(){
+        var i = document.getElementById("o1").value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET","http://192.168.56.115/cgi-bin/dockerps.py?x="+i,true);
+        xhr.send();
+        xhr.onload = function( ){
+                var out = xhr.responseText;
+                document.getElementById('p1').innerHTML = out;
+        }
+        document.getElementById('o1').innerHTML = "Write your code here:";
+        }
+</script>
+
+<script>
+        function w3_open() {
+          document.getElementById("main").style.marginLeft = "25%";
+          document.getElementById("mySidebar").style.width = "25%";
+          document.getElementById("mySidebar").style.display = "block";
+          document.getElementById("openNav").style.display = 'none';
+        }
+        function w3_close() {
+          document.getElementById("main").style.marginLeft = "0%";
+          document.getElementById("mySidebar").style.display = "none";
+          document.getElementById("openNav").style.display = "inline-block";
+        }
+</script>
